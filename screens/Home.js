@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable, Image, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TextInput, Pressable, Image, ScrollView, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/Home';
 import { StatusBar } from 'expo-status-bar';
@@ -45,61 +45,78 @@ const Home = () => {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userToken');
-    // Redirecionar para a tela de login ou reiniciar a navegação
     alert('Você saiu com sucesso!');
   };
 
+  const cards = [
+    { id: 1, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 2, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 3, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 4, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 5, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 6, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 7, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 8, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 9, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+    { id: 10, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+  ];
 
+  const navigation = useNavigation();
 
-const cards = [
-  { id: 1, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 2, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 3, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 4, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 5, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 6, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 7, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 8, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 9, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-  { id: 10, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-];
+  const handleDetails = () => {
+    navigation.navigate('Details'); // Usando navigate para a tela Details
+  };
 
+  const handleSaveCard = async (card) => {
+    try {
+      // Buscar os cards salvos previamente
+      const savedCardsData = await AsyncStorage.getItem('savedCards');
+      const savedCards = savedCardsData ? JSON.parse(savedCardsData) : [];
 
-const navigation = useNavigation();
+      // Verificar se o card já foi salvo antes
+      const isCardSaved = savedCards.some((savedCard) => savedCard.id === card.id);
 
-const handleDetails = () => {
-  navigation.navigate('Details'); // Usando navigate para a tela Details
-}
+      if (isCardSaved) {
+        alert('Este card já foi salvo!');
+        return; // Não adicionar novamente
+      }
+
+      // Adicionar o card à lista
+      savedCards.push(card);
+
+      // Salvar os cards atualizados de volta no AsyncStorage
+      await AsyncStorage.setItem('savedCards', JSON.stringify(savedCards));
+
+      alert('Card salvo com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar card', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar />
       <View style={styles.header}>
-
         <View style={styles.headerLeft}></View>
         <View style={styles.headerRight}></View>
-
       </View>
-      
 
       <View style={styles.inputContainer}>
         <MagnifyingGlass size={30} weight="duotone" />
-        <TextInput 
+        <TextInput
           style={styles.input}
-          placeholder='Pesquise sua casa'
+          placeholder="Pesquise sua casa"
           placeholderTextColor={"#606060"}
         />
-
       </View>
-      
-      <View style={styles.content}> 
 
-      <ScrollView contentContainerStyle={styles.cardContainer}>
-        <View style={styles.gridContainer}>
-        {cards.map((card) => (
+      <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.cardContainer}>
+          <View style={styles.gridContainer}>
+            {cards.map((card) => (
               <View key={card.id} style={styles.card}>
                 <Pressable style={styles.cardButton} onPress={handleDetails}>
-                  <Image style={styles.cardImage} source={require("../assets/Image 1.png")} />
+                  <Image style={styles.cardImage} source={require('../assets/Image_1.png')} />
                   <View style={styles.cardInfo}>
                     <Text style={styles.cardInfoTitle}>{card.title}</Text>
                     <Text style={styles.cardInfoSubTitle}>{card.subtitle}</Text>
@@ -107,16 +124,15 @@ const handleDetails = () => {
                 </Pressable>
                 <View style={styles.cardInfoBuy}>
                   <Text style={styles.cardInfoText}>{card.price}</Text>
-                  <PlusSquare size={40} color='#00FF38' weight='fill' />
+                  <Pressable onPress={() => handleSaveCard(card)}>
+                    <PlusSquare size={40} color='#00FF38' weight='fill' />
+                  </Pressable>
                 </View>
               </View>
             ))}
-
-        </View>
-
-      </ScrollView>
+          </View>
+        </ScrollView>
       </View>
-      
     </View>
   );
 };

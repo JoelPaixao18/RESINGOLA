@@ -15,7 +15,7 @@ function Details() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.headerImage} source={require("../assets/Image 1.png")} />
+        <Image style={styles.headerImage} source={require("../assets/Image_1.png")} />
 
         <View style={styles.headerInfoButtons}>
           {/* Botão que chama a função handleGoBack ao ser pressionado */}
