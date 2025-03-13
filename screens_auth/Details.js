@@ -1,17 +1,25 @@
-import {  Bookmark, CaretLeft, MapPin } from 'phosphor-react-native';
+import { Bookmark, CaretLeft, MapPin } from 'phosphor-react-native';
 import React from 'react';
 import { Image, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';  // Importando o hook useNavigation
 import styles from '../styles/Details';
 
-
 function Details() {
+  const navigation = useNavigation(); // Inicializando a navegação
+
+  // Função que será chamada ao clicar no ícone "CaretLeft"
+  const handleGoBack = () => {
+    navigation.goBack();  // Volta para a tela anterior
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image style={styles.headerImage} source={require("../assets/Image 1.png")} />
 
         <View style={styles.headerInfoButtons}>
-          <CaretLeft size={32} />
+          {/* Botão que chama a função handleGoBack ao ser pressionado */}
+          <CaretLeft size={32} onPress={handleGoBack} /> 
 
           <Text style={styles.headerInfoButtonsText}>Detalhes</Text>
 

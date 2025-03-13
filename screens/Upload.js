@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Image, Text, Platform } from 'react-native';
+import { View, Button, Image, Text } from 'react-native';
 import * as Camera from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import * as MediaLibrary from 'expo-media-library';
 
 const Upload = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -11,13 +10,17 @@ const Upload = () => {
 
   useEffect(() => {
     const getPermissions = async () => {
-      // Solicitar permissões para a câmera
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === 'granted');
+      try {
+        // Solicitar permissões para a câmera diretamente usando expo-camera
+        const cameraStatus = await Camera.requestCameraPermissionsAsync();
+        setHasCameraPermission(cameraStatus.status === 'granted');
 
-      // Solicitar permissões para a galeria
-      const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setHasGalleryPermission(galleryStatus.status === 'granted');
+        // Solicitar permissões para a galeria diretamente usando expo-image-picker
+        const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        setHasGalleryPermission(galleryStatus.status === 'granted');
+      } catch (error) {
+        console.error('Erro ao solicitar permissões:', error);
+      }
     };
 
     getPermissions();
@@ -52,7 +55,7 @@ const Upload = () => {
       {hasCameraPermission === null || hasGalleryPermission === null ? (
         <Text>Carregando permissões...</Text>
       ) : hasCameraPermission === false || hasGalleryPermission === false ? (
-        <Text>Permissões negadas!</Text>
+        <Text>Permissões negadas! Por favor, conceda permissões.</Text>
       ) : (
         <>
           <Button title="Tirar Foto" onPress={takePhoto} />

@@ -13,10 +13,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.seuapp",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Este aplicativo precisa de acesso à câmera para tirar fotos.",
-        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa de acesso à galeria para selecionar fotos."
+        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa de acesso à galeria para selecionar fotos.",
+        "NSLocationWhenInUseUsageDescription": "Precisamos da sua localização para exibir o mapa."
       }
     },
     "android": {
@@ -26,7 +28,8 @@
       },
       "permissions": [
         "CAMERA",
-        "MEDIA_LIBRARY"
+        "MEDIA_LIBRARY",
+        ["ACCESS_FINE_LOCATION"]
       ]
     },
     "web": {

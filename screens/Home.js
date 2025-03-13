@@ -67,13 +67,9 @@ const cards = [
 
 const navigation = useNavigation();
 
-function handleDetails() {
-
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Details' }], // Redireciona para a tela principal após login
-        });
-    }
+const handleDetails = () => {
+  navigation.navigate('Details'); // Usando navigate para a tela Details
+}
 
   return (
     <View style={styles.container}>
