@@ -45,7 +45,7 @@ function Save() {
     <View style={save.container}>
       <ScrollView>
         {savedCards.length === 0 ? (
-          <Text>Nenhum card salvo!</Text>
+          <Text style={save.emptyText}>Nenhum card salvo!</Text>
         ) : (
           savedCards.map((card, index) => (
             <View key={index} style={styles.card}> {/* Usando o estilo de card da Home */}

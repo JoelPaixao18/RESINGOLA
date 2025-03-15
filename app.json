@@ -3,7 +3,6 @@
     "name": "first-app",
     "slug": "first-app",
     "version": "1.0.0",
-    "newArchEnabled": true,
     "orientation": "portrait",
     "icon": "./assets/splash.png",
     "userInterfaceStyle": "light",
@@ -12,13 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "newArchEnabled": true,
     "ios": {
-      "bundleIdentifier": "com.seuapp",
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "Este aplicativo precisa de acesso à câmera para tirar fotos.",
-        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa de acesso à galeria para selecionar fotos.",
-        "NSLocationWhenInUseUsageDescription": "Precisamos da sua localização para exibir o mapa."
+       "NSCameraUsageDescription": "Precisamos acessar sua câmera para tirar fotos.",
+       "NSPhotoLibraryUsageDescription": "Precisamos acessar sua galeria para selecionar fotos."
       }
     },
     "android": {
@@ -26,11 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "CAMERA",
-        "MEDIA_LIBRARY",
-        ["ACCESS_FINE_LOCATION"]
-      ]
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

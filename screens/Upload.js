@@ -1,70 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { View, Button, Image, Text } from 'react-native';
-import * as Camera from 'expo-camera';
+import React, { useState } from 'react';
+import { Button, Image, View, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-const Upload = () => {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
-  const [imageUri, setImageUri] = useState(null);
+export default function ImagePickerExample() {
+  const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    const getPermissions = async () => {
-      try {
-        // Solicitar permissões para a câmera diretamente usando expo-camera
-        const cameraStatus = await Camera.requestCameraPermissionsAsync();
-        setHasCameraPermission(cameraStatus.status === 'granted');
+  const pickImage = async () => {
+    // Solicita permissão para acessar a galeria
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Desculpe, precisamos da permissão para acessar a galeria!');
+      return;
+    }
 
-        // Solicitar permissões para a galeria diretamente usando expo-image-picker
-        const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        setHasGalleryPermission(galleryStatus.status === 'granted');
-      } catch (error) {
-        console.error('Erro ao solicitar permissões:', error);
-      }
-    };
+    // Abre a galeria para selecionar uma imagem
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    getPermissions();
-  }, []);
-
-  const takePhoto = async () => {
-    if (hasCameraPermission) {
-      const photo = await Camera.takePictureAsync();
-      setImageUri(photo.uri);
-    } else {
-      alert('Você precisa conceder permissão para a câmera!');
+    if (!result.cancelled) {
+      setImage(result.uri);
     }
   };
 
-  const pickImage = async () => {
-    if (hasGalleryPermission) {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-      });
+  const takePhoto = async () => {
+    // Solicita permissão para acessar a câmera
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Desculpe, precisamos da permissão para acessar a câmera!');
+      return;
+    }
 
-      if (!result.cancelled) {
-        setImageUri(result.uri);
-      }
-    } else {
-      alert('Você precisa conceder permissão para a galeria!');
+    // Abre a câmera para tirar uma foto
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
     }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {hasCameraPermission === null || hasGalleryPermission === null ? (
-        <Text>Carregando permissões...</Text>
-      ) : hasCameraPermission === false || hasGalleryPermission === false ? (
-        <Text>Permissões negadas! Por favor, conceda permissões.</Text>
-      ) : (
-        <>
-          <Button title="Tirar Foto" onPress={takePhoto} />
-          <Button title="Escolher Imagem" onPress={pickImage} />
-          {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />}
-        </>
-      )}
+    <View style={styles.container}>
+      <Button title="Escolher uma imagem da galeria" onPress={pickImage} />
+      <Button title="Tirar uma foto" onPress={takePhoto} />
+      {image && <Image source={{ uri: image }} style={styles.image} />}
     </View>
   );
-};
+}
 
-export default Upload;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+  },
+});

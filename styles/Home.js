@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-
 const styles = StyleSheet.create({
   container: { 
     paddingHorizontal: 20, 
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   inputContainer: {
-    width: "80%",
+    width: "100%",
     height: 56,
     backgroundColor: "white",
     borderStyle: "solid",
@@ -49,18 +48,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Cards na horizontal
     flexWrap: 'wrap', // Permite que os cards se ajustem para a linha seguinte
     justifyContent: 'space-between',
+    padding: 5,
   },
   card: (screenWidth) => ({
     width: screenWidth / 2 - 20,
-    height: 240,
     borderRadius: 15,
     paddingHorizontal: 10,
     justifyContent: "space-between",
     gap: 5,
+    padding: 15,
     backgroundColor: "grey",
-
     margin: 10,
-    width: 150,
+    width: 130,
     borderWidth: 1,
     borderRadius: 8,
     overflow: 'hidden',
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "columns",
   },
   cardImage:{
-    width: 175,
+    width: 149,
     borderRadius: 15,
   },
   cardInfo:{

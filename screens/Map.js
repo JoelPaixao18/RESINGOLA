@@ -49,7 +49,7 @@ function Map() {
   }
 
   if (!location) {
-    return <Text>Carregando localização...</Text>;
+    return <Text style={styles.waitMapText}>Carregando localização...</Text>;
   }
 
   // Marcadores adicionais no mapa
@@ -130,5 +130,12 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 16,        // Tamanho da fonte
     fontWeight: 'bold',  // Deixa o texto mais visível
+  },
+  waitMapText:{
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    justifyContent: 'center',
   },
 });

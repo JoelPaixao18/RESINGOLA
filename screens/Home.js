@@ -53,12 +53,7 @@ const Home = () => {
     { id: 2, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
     { id: 3, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
     { id: 4, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 5, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 6, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 7, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 8, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 9, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
-    { id: 10, title: 'Vivenda T4', subtitle: 'Zango 3', price: '$2,500.00' },
+
   ];
 
   const navigation = useNavigation();
