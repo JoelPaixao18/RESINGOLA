@@ -35,7 +35,7 @@ export default function _TabsLayout() {
         headerShown: false, // Oculta o cabeçalho
         tabBarStyle: {
           backgroundColor: '#1A7526', // Define o fundo verde
-          height: 55,
+          height: 75,
         },
 
         tabBarActiveTintColor: 'white', // Cor dos ícones ativos

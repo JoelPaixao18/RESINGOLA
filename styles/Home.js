@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: "space-between",
     gap: 5,
-    padding: 15,
     backgroundColor: "grey",
     margin: 10,
     width: 130,
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: "columns",
   },
   cardImage:{
-    width: 149,
+    width: 155,
     borderRadius: 15,
   },
   cardInfo:{
