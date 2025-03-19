@@ -36,9 +36,30 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
   },
+  typeHouseContainer: {
+    top: 15,
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  typeHouseButton: {
+    flexDirection: 'row',
+  },
+  typeHouseText: {
+    margin: 5,
+    height: 56,
+    fontWeight: 600,
+    paddingHorizontal: 20,
+    paddingVertical: 17,
+    backgroundColor: 'white',
+    borderStyle: 'solid',
+    borderRadius: 50,
+  
+  },
   content:{
     width: "100%",
     gap: 20,
+    top: 35,
   },
   cardContainer: {
     flexGrow: 1,

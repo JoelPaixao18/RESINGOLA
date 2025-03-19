@@ -62,6 +62,10 @@ const Home = () => {
     navigation.navigate('Details'); // Usando navigate para a tela Details
   };
 
+  const handleVivenda = () => {
+    navigation.navigate('Home'); // Usando navigate para a tela Details
+  };
+
   const handleSaveCard = async (card) => {
     try {
       // Buscar os cards salvos previamente
@@ -97,12 +101,26 @@ const Home = () => {
       </View>
 
       <View style={styles.inputContainer}>
-        <MagnifyingGlass size={30} weight="duotone" />
+        <MagnifyingGlass size={30} weight="thin" />
         <TextInput
           style={styles.input}
           placeholder="Pesquise sua casa"
           placeholderTextColor={"#606060"}
         />
+      </View>
+
+      <View style={styles.typeHouseContainer}>
+        <Pressable style={styles.typeHouseButton} onPress={handleDetails}>
+          <Text style={styles.typeHouseText}>Vivenda</Text>
+        </Pressable>
+
+        <Pressable style={styles.typeHouseButton}>
+          <Text style={styles.typeHouseText}>Apartamento</Text>
+        </Pressable>
+
+        <Pressable style={styles.typeHouseButton}>
+           <Text style={styles.typeHouseText}>Condomínio</Text>
+        </Pressable>
       </View>
 
       <View style={styles.content}>
