@@ -100,7 +100,7 @@ function Map() {
       </MapView>
 
       <View style={styles.inputContainer}>
-        <MagnifyingGlass size={30} weight="duotone" />
+        <MagnifyingGlass size={30} weight="thin" />
           <TextInput
                   style={styles.input}
                   placeholder="Pesquise sua casa"

@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Switch, ActivityIndicator, } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Switch, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location'; // Importando a API de localização
+import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/Upload';
 
-export default function ResidenceForm() {
+export default function Upload() {
   const [image, setImage] = useState(null);
   const [houseSize, setHouseSize] = useState('');
   const [compartments, setCompartments] = useState('');
   const [typology, setTypology] = useState('Apartamento');
   const [hasWater, setHasWater] = useState(false);
   const [hasElectricity, setHasElectricity] = useState(false);
-  const [location, setLocation] = useState(null); // Estado para armazenar o nome do local
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false); // Estado para indicar carregamento
+  const [location, setLocation] = useState(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [price, setPrice] = useState('');
+  const navigation = useNavigation();
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -31,8 +34,9 @@ export default function ResidenceForm() {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      console.log('URI da imagem selecionada:', result.assets[0].uri); // Verifique a URI da imagem
+      setImage(result.assets[0].uri); // Atualize o estado da imagem
     }
   };
 
@@ -49,41 +53,45 @@ export default function ResidenceForm() {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      console.log('URI da imagem capturada:', result.assets[0].uri); // Verifique a URI da imagem
+      setImage(result.assets[0].uri); // Atualize o estado da imagem
     }
   };
 
   const getLocation = async () => {
-    setIsLoadingLocation(true); // Inicia o carregamento
+    setIsLoadingLocation(true);
 
-    // Solicita permissão para acessar a localização
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       alert('Desculpe, precisamos da permissão para acessar a localização!');
-      setIsLoadingLocation(false); // Para o carregamento
+      setIsLoadingLocation(false);
       return;
     }
 
-    // Obtém as coordenadas atuais
     let { coords } = await Location.getCurrentPositionAsync({});
-
-    // Converte as coordenadas em um endereço legível (geocodificação reversa)
     let address = await Location.reverseGeocodeAsync(coords);
 
     if (address.length > 0) {
-      const { city, district } = address[0]; // Extrai cidade e bairro
-      setLocation(`${city}, ${district}`); // Armazena o nome do local
+      const { city, district } = address[0];
+      setLocation(`${city}, ${district}`);
     } else {
       alert('Não foi possível obter o endereço.');
     }
 
-    setIsLoadingLocation(false); // Para o carregamento
+    setIsLoadingLocation(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log('URI da imagem no estado:', image); // Verifique o estado da imagem
+    if (!image) {
+      alert('Por favor, adicione uma imagem da residência.');
+      return;
+    }
+
     const residenceData = {
-      image,
+      id: Math.random().toString(36).substr(2, 9), // Gerar um ID único
+      image, // URI da imagem
       houseSize,
       compartments,
       typology,
@@ -91,11 +99,28 @@ export default function ResidenceForm() {
         water: hasWater,
         electricity: hasElectricity,
       },
-      location, // Inclui o nome do local nos dados
+      location,
       price,
     };
-    console.log('Dados da residência:', residenceData);
-    alert('Residência cadastrada com sucesso!');
+
+    console.log('Dados da residência a serem salvos:', residenceData); // Verifique os dados antes de salvar
+
+    try {
+      const savedResidencesData = await AsyncStorage.getItem('savedResidences');
+      const savedResidences = savedResidencesData ? JSON.parse(savedResidencesData) : [];
+
+      savedResidences.push(residenceData);
+      await AsyncStorage.setItem('savedResidences', JSON.stringify(savedResidences));
+
+      console.log('Dados salvos:', savedResidences); // Verifique os dados salvos
+      alert('Residência cadastrada com sucesso!');
+
+      // Navegar de volta para a tela de Home
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Erro ao salvar residência', error);
+      alert('Erro ao cadastrar residência');
+    }
   };
 
   return (
@@ -167,7 +192,7 @@ export default function ResidenceForm() {
           <Text style={styles.label}>Localização</Text>
           <TouchableOpacity style={styles.locationButton} onPress={getLocation}>
             {isLoadingLocation ? (
-              <ActivityIndicator color="#6200ee" /> // Mostra um spinner durante o carregamento
+              <ActivityIndicator color="#6200ee" />
             ) : (
               <Text style={styles.locationButtonText}>
                 {location || 'Obter Localização'}
@@ -193,4 +218,3 @@ export default function ResidenceForm() {
     </ScrollView>
   );
 }
-
